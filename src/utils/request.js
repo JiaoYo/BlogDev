@@ -8,8 +8,8 @@ import router from '@/router'
 
 const request = axios.create({
   // baseURL: 'http://geek.itheima.net/v1_0',
-  // baseURL: 'http://101.201.58.143:3007',
-  baseURL: 'http://127.0.0.1:3007',
+  baseURL: 'http://101.201.58.143:3007',
+  // baseURL: 'http://127.0.0.1:3007',
   timeout: 5000,
 })
 

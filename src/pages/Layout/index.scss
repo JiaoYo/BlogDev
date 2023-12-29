@@ -9,7 +9,11 @@
 .logo {
   width: 200px;
   height: 60px;
-  background: url('~@/assets/logo.png') no-repeat center / 160px auto;
+  color: #fff;
+  font-size: 24px;
+  line-height: 60px;
+  text-align: center;
+  // background: url('~@/assets/logo.png') no-repeat center / 160px auto;
 }
 
 .layout-content {
@@ -32,6 +36,8 @@
     cursor: pointer;
   }
 }
+
 .ant-layout-header {
   padding: 0 !important;
+  // background-color: #fff;
 }

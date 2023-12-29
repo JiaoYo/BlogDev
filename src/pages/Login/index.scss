@@ -6,11 +6,9 @@
   top: 0;
   background: center/cover url('~@/assets/login.png');
 
-  .login-logo {
-    width: 200px;
-    height: 60px;
-    display: block;
-    margin: 0 auto 20px;
+  h1 {
+    text-align: center;
+    color: #64A15E;
   }
 
   .login-container {
@@ -23,7 +21,9 @@
     box-shadow: 0 0 50px rgb(0 0 0 / 10%);
   }
 
-  .login-checkbox-label {
-    color: #1890ff;
+  .login-checkbox-label,
+  .ant-btn-primary {
+    // color: #64A15E;
+    background-color: #64A15E !important;
   }
 }

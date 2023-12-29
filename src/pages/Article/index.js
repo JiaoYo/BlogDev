@@ -78,7 +78,7 @@ const Acticle = () => {
     console.log(values)
     if (recordobject.id) {
       let res = await editlist({ ...values, id: recordobject.id })
-      if (res.status == 1) {
+      if (res.status === 1) {
         return message.error(`修改失败:${res.message}`)
       }
       message.success('修改成功')
