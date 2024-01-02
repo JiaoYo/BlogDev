@@ -1,5 +1,5 @@
 // 封装和文章相关的接口函数
-// 查询
+// 查询 文章分类 列表
 import { request } from '@/utils'
 export function getlist() {
   return request({
@@ -30,3 +30,28 @@ export function dellist(data) {
     method: 'get',
   })
 }
+
+// 查询文章列表
+export function getarticleList(data) {
+  return request({
+    url: `/api/getArtCateList`,
+    method: 'post',
+  })
+}
+// 添加文章
+export function addArtCateList(data) {
+  return request({
+    url: `/api/addArtCateList`,
+    method: 'post',
+    data
+  })
+}
+// 删除文章
+export function delArtCate(id) {
+  return request({
+    url: `/api/delArtCate/${id}`,
+    method: 'post',
+  })
+}
+
+

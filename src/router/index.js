@@ -7,6 +7,7 @@ import { Suspense, lazy } from 'react'
 
 // 1. lazy函数对组件进行导入
 const Home = lazy(() => import('@/pages/Home'))
+const Classify = lazy(() => import('@/pages/Classify'))
 const Article = lazy(() => import('@/pages/Article'))
 
 // 配置路由实例
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={'加载中'}>
             <Article />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'classify',
+        element: (
+          <Suspense fallback={'加载中'}>
+            <Classify />
           </Suspense>
         ),
       },

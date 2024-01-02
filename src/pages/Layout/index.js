@@ -15,7 +15,12 @@ const items = [
     icon: <HomeOutlined />,
   },
   {
-    label: '文章管理',
+    label: '文章分类',
+    key: '/Classify',
+    icon: <DiffOutlined />,
+  },
+  {
+    label: '文章列表',
     key: '/article',
     icon: <DiffOutlined />,
   },

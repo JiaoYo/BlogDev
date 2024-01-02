@@ -7,9 +7,8 @@ import router from '@/router'
 // 3. 请求拦截器 / 响应拦截器
 
 const request = axios.create({
-  // baseURL: 'http://geek.itheima.net/v1_0',
-  baseURL: 'http://101.201.58.143:3007',
-  // baseURL: 'http://127.0.0.1:3007',
+  // baseURL: 'http://101.201.58.143:3007',
+  baseURL: 'http://127.0.0.1:3007',
   timeout: 5000,
 })
 
@@ -39,14 +38,13 @@ request.interceptors.response.use(
   (response) => {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
-    // if (
-    //   response.data.status === 1 &&
-    //   response.data.message == '身份认证失败！'
-    // ) {
-    //   removeToken()
-    //   router.navigate('/login')
-    //   window.location.reload()
-    // }
+    if (
+      response.data.status === 1 &&
+      response.data.message === '身份认证失败！'
+    ) {
+      removeToken()
+      router.navigate('/login')
+    }
     return response.data
   },
   (error) => {
