@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getarticleList, addArtCateList, editlist, delArtCate } from '@/apis/article'
+import { getarticleList, addArtCateList, editArtCate, delArtCate } from '@/apis/article'
 import { EditOutlined, DeleteOutlined,PlusOutlined,LoadingOutlined } from '@ant-design/icons'
 import {getNowDate} from '@/utils/useTools'
 import useClass from '@/hooks/useClass'
@@ -21,16 +21,14 @@ const Acticle = () => {
     {
       title: '标题',
       dataIndex: 'name',
-      width: 220,
     },
     {
       title: '文章简介',
-      width: 160,
       dataIndex: 'synopsis',
     },
     {
       title: '文章分类',
-      width: 160,
+      width: 100,
       dataIndex: 'classify',
     },
     {
@@ -70,36 +68,34 @@ const Acticle = () => {
   ]
   const [form] = Form.useForm()
   const onEditinfo = (data) => {
-    setIsRecord(data)
+    setcontent(data.content)
+    seteditObj(data)
+    setImageUrl(data.url)
+    form.setFieldsValue({ ...data })
     setisdislog(true)
   }
   // 删除文章
   const onConfirm = async (data) => {
     await delArtCate(Number(data.id))
     message.success('删除成功')
-    setArticleList(
-      articleList.filter((item) => {
-        return item.id !== data.id
-      })
-    )
+    setpagination({...pagination}) //刷新数据
   }
   // 弹框
   const [isdislog, setisdislog] = useState(false)
   const showModal = () => {
     setisdislog(true)
   }
-  // 获取频道列表
+  // 频道列表
   const {channelList} =useClass()
   const { Option } = Select
   // 编辑对象
-  const [recordobject, setIsRecord] = useState({})
-  // 获取文章列表
-  const [articleList, setArticleList] = useState([])
+  const [editObj, seteditObj] = useState({})
+
   // 提交表单
   const handleOk = async (values) => {
     values.time=getNowDate()
-    if (recordobject.id) {
-      let res = await editlist({ ...values, id: recordobject.id })
+    if (editObj.id) {
+      let res = await editArtCate({ ...values, id: editObj.id })
       if (res.status === 1) {
         return message.error(`修改失败:${res.message}`)
       }
@@ -109,28 +105,55 @@ const Acticle = () => {
       await addArtCateList(values)
       message.success('添加成功')
     }
-    setisdislog(false)
-    setArticleList([...articleList, values])
+    oncancel()
+    setpagination({...pagination}) //刷新数据
   }
+  /* 表单错误回调 */
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
-  // 上传图片
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+  // 关闭弹窗
+  const oncancel = () => {
+    setisdislog(false)
+    seteditObj({})
+    setcontent(null)
+    setImageUrl('')
+    form.resetFields()
+  }
+  // 通过组件传回来的值，设置组件的值
+  const setDetails = content => form.setFieldsValue({'content': content})
+  const [content,setcontent] =useState(null) // 编辑器内容
+
+  // 分页
+  const [pagination,setpagination] = useState({
+    pageSize:10,
+    currentPage:1,
+  })
+  const onPageChange=(page)=>{
+    setpagination({
+      ...pagination,
+      currentPage:page
+    })
+  }
+  const [articleList, setArticleList] = useState([])
+  const [total,settotal] = useState(0)
+  useEffect(() => {
+    // 请求获取文章列表
+    async function getList() {
+      const res = await getarticleList(pagination)
+      setArticleList(res.data)
+      settotal(res.total)
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
+    getList()
+  }, [pagination])
+  // 图片上传
+  const customRequest= async(options)=>{
+    const { file, filename, data } = options;
     getBase64(file, (url) => {
       setLoading(false);
       setImageUrl(url);
     });
-    return isJpgOrPng && isLt2M;
-  };
+  }
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const getBase64 = (img, callback) => {
@@ -151,21 +174,6 @@ const Acticle = () => {
       </div>
     </div>
   );
-
-
-  // 通过组件传回来的值，设置组件的值
-  const setDetails = content => form.setFieldsValue({'content': content})
-  useEffect(() => {
-    async function getList() {
-      const res = await getarticleList()
-      setArticleList(res.data)
-    }
-    if (isdislog) {
-      form.setFieldsValue({ ...recordobject })
-    } else {
-      getList()
-    }
-  }, [articleList.length, recordobject])
   return (
     <>
       <div>
@@ -175,14 +183,19 @@ const Acticle = () => {
       </div>
       <div>
         <Table
-          rowKey={(record, index) => index}
+        rowKey={record => record.id}
           columns={columns}
           dataSource={articleList}
+          pagination={{
+            total: total,
+            pageSize: pagination.pageSize,
+            onChange: onPageChange,
+          }}
         ></Table>
       </div>
-      <Modal
-      width={1000}
-        title={recordobject.id ? '编辑' : '添加'}
+       <Modal
+        width={1000}
+        title={editObj.id ? '编辑' : '添加'}
         okButtonProps={{
           style: {
             display: 'none',
@@ -194,21 +207,11 @@ const Acticle = () => {
           },
         }}
         open={isdislog}
-        onCancel={() => {
-          setisdislog(false)
-          setIsRecord({})
-          form.resetFields()
-        }}
+        onCancel={oncancel}
       >
         <Form
           name="xxx"
           form={form}
-          labelCol={{
-            span: 4,
-          }}
-          wrapperCol={{
-            span: 18,
-          }}
           style={{
             maxWidth: 1000,
           }}
@@ -263,31 +266,27 @@ const Acticle = () => {
           <Form.Item
             label="文章封面"
             name="url"
-            rules={[
-              {
-                required: true,
-                message: '请上传封面',
-              },
-            ]}
+            valuePropName=""
           >
              <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-      >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-      </Upload>
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              customRequest={customRequest}
+               >
+                 {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            </Upload>
           </Form.Item>
           <Form.Item  label="文章内容"  name="content">
           <Editor
             setDetails={setDetails}
+            value={content}
            />
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              offset: 8,
+              offset: 20,
               span: 16,
             }}
           >

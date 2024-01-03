@@ -112,7 +112,7 @@ const Class = () => {
       </div>
       <div>
         <Table
-          rowKey={(record, index) => index}
+           rowKey={record => record.id}
           columns={columns}
           dataSource={articleList}
         ></Table>

@@ -7,3 +7,18 @@ body {
 #root {
   height: 100%;
 }
+
+/* 一般浏览器的不要太小，容易看不见 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.1);
+}

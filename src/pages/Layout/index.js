@@ -29,7 +29,7 @@ const items = [
 const GeekLayout = () => {
   const navigate = useNavigate()
   const onMenuClick = (route) => {
-    console.log('菜单被点击了', route)
+    // console.log('菜单被点击了', route)
     const path = route.key
     navigate(path)
   }
@@ -37,7 +37,7 @@ const GeekLayout = () => {
   // 反向高亮
   // 1. 获取当前路由路径
   const location = useLocation()
-  console.log(location.pathname)
+  // console.log(location.pathname)
   const selectedkey = location.pathname
 
   // 触发个人用户信息action
