@@ -29,7 +29,13 @@ const Acticle = () => {
     {
       title: '文章分类',
       width: 100,
-      dataIndex: 'classify',
+      render: (data) => {
+        return (
+          <>
+            { channelList.filter(item=>item.id===data.classify*1) [0].name }
+          </>
+        )
+      }
     },
     {
       title: '创建时间',
@@ -260,7 +266,7 @@ const Acticle = () => {
               placeholder="请选择文章分类"
               style={{ width: 120 }}
             >
-              {channelList.map(item => <Option key={item.id} value={item.name}>{item.name}</Option>)}
+              {channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Form.Item>
           <Form.Item
