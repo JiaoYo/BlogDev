@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { getToken, removeToken } from './token'
 import router from '@/router'
+import { message } from 'antd'
 // 1. 根域名配置
 // 2. 超时时间
 // 3. 请求拦截器 / 响应拦截器
@@ -37,20 +38,16 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response) => {
     // 2xx 范围内的状态码都会触发该函数。
-    // 对响应数据做点什么
     if (
-      response.data.status === 1 &&
-      response.data.message === '身份认证失败！'
-    ) {
-      removeToken()
-      router.navigate('/login')
+      response.data.status === 1) {
+      message.error(response.data.message)
+      return new Promise(() => {})
+    }else {
+      return response.data
     }
-    return response.data
   },
   (error) => {
     // 超出 2xx 范围的状态码都会触发该函数。
-    // 对响应错误做点什么
-    // 监控401 token失效
     console.log(error, 'error')
     if (error.response.status === 1) {
       removeToken()
