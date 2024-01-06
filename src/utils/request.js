@@ -38,11 +38,16 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response) => {
     // 2xx 范围内的状态码都会触发该函数。
-    if (
+    if (response.data.message=="身份认证失败！") {
+      removeToken()
+      router.navigate('/login')
+      return new Promise(() => {})
+    }
+    else if (
       response.data.status === 1) {
       message.error(response.data.message)
       return new Promise(() => {})
-    }else {
+    } {
       return response.data
     }
   },

@@ -32,7 +32,7 @@ const Acticle = () => {
       render: (data) => {
         return (
           <>
-            { channelList.filter(item=>item.id===data.classify*1) [0].name }
+            { channelList.filter(item=>item.id===data.classify*1) [0]?.name }
           </>
         )
       }
@@ -77,7 +77,7 @@ const Acticle = () => {
     setcontent(data.content)
     seteditObj(data)
     setImageUrl(data.url)
-    form.setFieldsValue({ ...data })
+    form.setFieldsValue({ ...data,classify:data.classify*1 })
     setisdislog(true)
   }
   // 删除文章
