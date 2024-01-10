@@ -11,6 +11,7 @@
     "@wangeditor/editor-for-react": "^1.0.6",
     "antd": "^5.8.2",
     "axios": "^1.4.0",
+    "braft-editor": "^2.3.9",
     "echarts": "^5.4.3",
     "echarts-gl": "2.0.9",
     "lodash": "^4.17.21",
