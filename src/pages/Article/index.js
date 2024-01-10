@@ -33,7 +33,7 @@ const Acticle = () => {
       render: (data) => {
         return (
           <>
-            { channelList.filter(item=>item.id===data.classify*1) [0]?.name }
+            { channelList.filter(item=>item.id===data.classify*1)[0]?.name }
           </>
         )
       }
@@ -101,6 +101,7 @@ const Acticle = () => {
   // 提交表单
   const handleOk = async (values) => {
     values.time=getNowDate()
+    values.url=imageUrl
     if (editObj.id) {
       let res = await editArtCate({ ...values, id: editObj.id })
       if (res.status === 1) {
@@ -108,7 +109,6 @@ const Acticle = () => {
       }
       message.success('修改成功')
     } else {
-      values.url=imageUrl
       await addArtCateList(values)
       message.success('添加成功')
     }
@@ -295,7 +295,7 @@ const Acticle = () => {
             }}
           >
             <Button type="primary" htmlType="submit">
-              Submit
+              提交
             </Button>
           </Form.Item>
         </Form>

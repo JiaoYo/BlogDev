@@ -8,7 +8,8 @@ const Login = () => {
   const navigate = useNavigate()
   const onFinish = async (values) => {
     // 触发异步action fetchLogin
-    await dispatch(fetchLogin(values))
+   let res = await dispatch(fetchLogin(values))
+   if(!res)return
     // 1. 跳转到首页
     navigate('/')
     // 2. 提示一下用户
