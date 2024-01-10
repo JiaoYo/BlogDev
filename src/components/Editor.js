@@ -29,6 +29,18 @@ function MyEditor({ value ,setDetails }) {
           insertFn(url)
       }
   }
+  editorConfig.MENU_CONF['uploadVideo'] = {
+    // 自定义上传
+    async customUpload(file, insertFn) {  
+        // file 即选中的文件
+        // 自己实现上传，并得到视频 url poster
+        // 最后插入视频
+        let formdata =new FormData();
+          formdata.append('file',file);
+          let {url} = await upload(formdata)
+        insertFn(url)
+    }
+}
 //   editorConfig.MENU_CONF['codeSelectLang'] = {
 //     // 代码语言
 //     codeLangs: [
