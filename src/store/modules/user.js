@@ -40,8 +40,10 @@ const userReducer = userStore.reducer
 const fetchLogin = (loginForm) => {
   return async (dispatch) => {
     const res = await login(loginForm)
-    if (res.token==="") return
+    if (!res) return false
+    if (res.token==="") return false
     dispatch(setToken(res.token))
+    return true
   }
 }
 
