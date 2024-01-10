@@ -66,3 +66,11 @@ export function dellist(data) {
     data,
   })
 }
+
+export function upload(data) {
+  return request({
+    url: `/api/upload`,
+    method: 'post',
+    data,
+  })
+}

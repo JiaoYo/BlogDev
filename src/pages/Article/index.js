@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getarticleList, addArtCateList, editArtCate, delArtCate } from '@/apis/article'
+import { upload } from '@/apis/user'
 import { EditOutlined, DeleteOutlined,PlusOutlined,LoadingOutlined } from '@ant-design/icons'
 import {getNowDate} from '@/utils/useTools'
 import useClass from '@/hooks/useClass'
@@ -154,19 +155,16 @@ const Acticle = () => {
   }, [pagination])
   // 图片上传
   const customRequest= async(options)=>{
-    const { file, filename, data } = options;
-    getBase64(file, (url) => {
-      setLoading(false);
-      setImageUrl(url);
-    });
+    setLoading(true);
+    const { file } = options;
+    const formData = new FormData();
+    formData.append('file', file);
+    const {url}= await upload(formData)
+    setLoading(false);
+    setImageUrl(url)
   }
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
   // 图片上传加载动画
   const uploadButton = (
     <div>
