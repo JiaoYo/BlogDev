@@ -120,7 +120,7 @@ const Share=()=> {
   const [sharelist,setShareList] = useState([])
   const [pageObj,setPageObj] = useState({
     page:1,
-    size:1,
+    size:5,
     pid:''
   })
   const [total,setTotal] = useState(0)
