@@ -9,6 +9,7 @@ import { Suspense, lazy } from 'react'
 const Home = lazy(() => import('@/pages/Home'))
 const Classify = lazy(() => import('@/pages/Classify'))
 const Article = lazy(() => import('@/pages/Article'))
+const Share = lazy(() => import('@/pages/Share'))
 
 // 配置路由实例
 
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={'加载中'}>
             <Classify />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'share',
+        element: (
+          <Suspense fallback={'加载中'}>
+            <Share />
           </Suspense>
         ),
       },

@@ -1,0 +1,25 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .left,
+  .right {
+    box-shadow: 1px 1px 5px 1px #ccc;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .left {
+    width: 20%;
+
+  }
+
+  .right {
+    width: 78%;
+  }
+}

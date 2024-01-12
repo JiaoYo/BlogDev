@@ -1,5 +1,5 @@
 import { Layout, Menu, Popconfirm } from 'antd'
-import { HomeOutlined, DiffOutlined, LogoutOutlined } from '@ant-design/icons'
+import { HomeOutlined, DiffOutlined, LogoutOutlined,ApiOutlined ,ApartmentOutlined} from '@ant-design/icons'
 import './index.scss'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -17,12 +17,17 @@ const items = [
   {
     label: '文章分类',
     key: '/Classify',
-    icon: <DiffOutlined />,
+    icon: <ApartmentOutlined />,
   },
   {
     label: '文章列表',
     key: '/article',
     icon: <DiffOutlined />,
+  },
+  {
+    label: '网站列表',
+    key: '/share',
+    icon: <ApiOutlined  />,
   },
 ]
 
