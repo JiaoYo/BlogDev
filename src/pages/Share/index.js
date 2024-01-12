@@ -2,10 +2,11 @@ import {useEffect,useState} from 'react'
 import { upload } from '@/apis/user'
 import {getsharelist,addshare,editshare,delshare} from '@/apis/share'
 import {Button ,Table,Space,Popconfirm,Select,Modal,Form,Input,Upload,message} from 'antd'
-import { EditOutlined, DeleteOutlined,PlusOutlined  ,LoadingOutlined,CheckCircleOutlined} from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined,PlusOutlined  ,LoadingOutlined} from '@ant-design/icons'
 import useShareCate from '@/hooks/useShareCate'
 import './index.scss'
 import Catetable from './catetable'
+const { TextArea } = Input;
 const Share=()=> {
   const columns = [
     {
@@ -42,7 +43,7 @@ const Share=()=> {
       key: 'text',
       render: (data) => {
         return (
-          <span>{ShareCateList.filter(item=>item.id == data.pid)[0].shareCateName }</span>
+          <span>{ShareCateList.filter(item=>item.id === data.pid)[0]?.shareCateName }</span>
         ) 
       }
     },
@@ -110,6 +111,7 @@ const Share=()=> {
     setPageObj({...pageObj})
   }
   const onChange = (data) =>setPageObj({
+    ...pageObj,
     pid:data,
   })
   // 获取文章分类列表
@@ -118,7 +120,7 @@ const Share=()=> {
   const [sharelist,setShareList] = useState([])
   const [pageObj,setPageObj] = useState({
     page:1,
-    size:5,
+    size:1,
     pid:''
   })
   const [total,setTotal] = useState(0)
@@ -196,6 +198,12 @@ const Share=()=> {
             pageSize:pageObj.size,
             showTitle:true,
             showTotal:total => `共${total}条`,
+            onChange:(page, pageSize) => {
+              setPageObj({
+                ...pageObj,
+                page:page,
+              })
+            }
           }}
           rowKey={record => record.id}
          />
@@ -215,7 +223,7 @@ const Share=()=> {
           name="basic"
           form={form}
           labelCol={{ span: 4 }}
-          wrapperCol={{ span: 14 }}
+          wrapperCol={{ span: 20 }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           initialValues={{ remember: true }}
@@ -226,7 +234,7 @@ const Share=()=> {
           <Form.Item label="名称" name="name" rules={[{ required: true,  message: '请输入名称', }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="网站logo"  valuePropName=""  name="logo" rules={[{ required: true,  message: '请上传logo', }]} >
+          <Form.Item label="网站logo"  valuePropName=""  >
             <Upload  
             name="avatar"
             listType="picture-card"
@@ -245,6 +253,10 @@ const Share=()=> {
             uploadButton
           )}
             </Upload>
+           <div style={{display:'flex',alignItems:"center"}}>
+           <Input value={imageUrl} placeholder='可输入图片地址' onChange={(val)=>setImageUrl(val.target.value)}/>
+            <Button type="primary" size='small'  onClick={()=>setImageUrl('http://101.201.58.143:3007/api/logo.png')}>使用默认</Button>
+           </div>
           </Form.Item>
           <Form.Item label="网站地址" name="url" rules={[{ required: true,  message: '请输入网站地址' }]}>
             <Input />
@@ -257,7 +269,7 @@ const Share=()=> {
           </Select>
           </Form.Item>
           <Form.Item label="网站介绍" name="text" rules={[{ required: true ,  message: '请选择网站介绍'}]}>
-            <Input />
+            <TextArea rows={2} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit">
