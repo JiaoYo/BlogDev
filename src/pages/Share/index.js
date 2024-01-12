@@ -43,7 +43,7 @@ const Share=()=> {
       key: 'text',
       render: (data) => {
         return (
-          <span>{ShareCateList.filter(item=>item.id === data.pid)[0]?.shareCateName }</span>
+          <span>{ShareCateList.filter(item=>item.id*1 === data.pid*1)[0]?.shareCateName }</span>
         ) 
       }
     },

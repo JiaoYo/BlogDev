@@ -69,6 +69,7 @@ const Catetable=() =>{
     }
     message.success(`${editcatedata.id?'编辑':'添加'}成功`)
     setIsModalOpen(false)
+    setSharecatename('')
     setCateList(catelist.concat({id:Math.random(),shareCateName:sharecatename}))
   }
   // 删除网站分类
