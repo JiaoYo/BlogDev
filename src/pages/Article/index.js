@@ -100,7 +100,6 @@ const Acticle = () => {
 
   // 提交表单
   const handleOk = async (values) => {
-    values.time=getNowDate()
     values.url=imageUrl
     if (editObj.id) {
       let res = await editArtCate({ ...values, id: editObj.id })
@@ -109,6 +108,7 @@ const Acticle = () => {
       }
       message.success('修改成功')
     } else {
+      values.time=getNowDate()
       await addArtCateList(values)
       message.success('添加成功')
     }

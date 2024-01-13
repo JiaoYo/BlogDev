@@ -85,6 +85,14 @@ const Share=()=> {
     setEditData({})
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // 编辑网站
+  const [editdata,setEditData] = useState({}) // 编辑的数据
+  const onEditinfo = (data) => {
+    setEditData(data)
+    form.setFieldsValue({...data})
+    setImageUrl(data.logo)
+    setIsModalOpen(true);
+  }
    // 添加网站
   const onFinish = async(values) => {
     if (editdata.id) {
@@ -96,20 +104,13 @@ const Share=()=> {
     handleCancel()
     setPageObj({...pageObj})
   };
-  // 编辑网站
-  const [editdata,setEditData] = useState({}) // 编辑的数据
-  const onEditinfo = (data) => {
-    setEditData(data)
-    form.setFieldsValue({...data})
-    setImageUrl(data.logo)
-    setIsModalOpen(true);
-  }
   // 删除网站
   const onConfirm =async (data) => {
     await delshare(data.id)
     message.success('删除成功')
     setPageObj({...pageObj})
   }
+  // 分页切换
   const onChange = (data) =>setPageObj({
     ...pageObj,
     pid:data,
@@ -132,6 +133,7 @@ const Share=()=> {
   useEffect(() => {
     // 请求获取文章列表
     getshareList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageObj])
 
   // 表单

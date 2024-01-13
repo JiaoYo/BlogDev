@@ -1,7 +1,8 @@
-import {useEffect,useState} from 'react'
-import {getsharecatelist,addsharecate,editsharecate,delsharecate} from '@/apis/share'
+import {useState} from 'react'
+import {addsharecate,editsharecate,delsharecate} from '@/apis/share'
 import {Button ,Table,Space,Popconfirm,Modal,Input,message} from 'antd'
 import { EditOutlined, DeleteOutlined,} from '@ant-design/icons'
+import  useShareCate from '@/hooks/useShareCate'
 const Catetable=() =>{
   const columns = [
     {
@@ -42,14 +43,7 @@ const Catetable=() =>{
     },
   ];
   // 获取网站分类列表
-  const [catelist,setCateList]=useState([])
-  const getcatelist=async()=>{
-    const {data}=await getsharecatelist()
-    setCateList(data)
-  }
-  useEffect(()=>{
-    getcatelist()
-  },[catelist.length])
+  const  {ShareCateList,getlist}= useShareCate()
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   // 当前编辑的网站分类对象
   const [editcatedata,setcateEditData] = useState({})
@@ -70,13 +64,13 @@ const Catetable=() =>{
     message.success(`${editcatedata.id?'编辑':'添加'}成功`)
     setIsModalOpen(false)
     setSharecatename('')
-    setCateList(catelist.concat({id:Math.random(),shareCateName:sharecatename}))
+    getlist()
   }
   // 删除网站分类
   const onConfirmcate =async (data) => {
     await delsharecate(data.id)
     message.success('删除成功')
-    setCateList(catelist.filter((item) => item.id !== data.id))
+    getlist()
   }
   const cnacelopen=()=>{
     setIsModalOpen(false)
@@ -87,7 +81,7 @@ const Catetable=() =>{
     <div>
       <h2>网站列表分类</h2> 
         <Button type="primary" onClick={()=>setIsModalOpen(true)} >添加</Button>
-      <Table  dataSource={catelist} columns={columns} rowKey={record => record.id} />
+      <Table  dataSource={ShareCateList} columns={columns} rowKey={record => record.id} />
     </div>
     <Modal title={`${editcatedata.id?'编辑':'添加'}`}  open={isModalOpen}   onOk={handleonOk} onCancel={cnacelopen}>
       名称 <Input value={sharecatename} onChange={(val)=>setSharecatename(val.target.value)}></Input>
