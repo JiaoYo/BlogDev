@@ -86,102 +86,89 @@ const Article = () => {
       },
     },
   ]
-
-  const [list, setList] = useState([])
   // 删除
   const onConfirm = async (data) => {
     await dellist({ id: data.id })
     message.success('删除成功')
-    setList(
-      list.filter((item) => {
-        return item.id !== data.id
-      })
-    )
+    if (list.length === 1 && pageobj.currentPage > 1) {
+      pageobj.currentPage--
+    }
+    pagesetobj({
+      ...pageobj
+    })
   }
-
+   // 编辑
+   const onEditinfo = (data) => {
+    setIsRecord(data)
+    form.setFieldsValue({ ...data })
+    setIsModalOpen(true)
+  }
   // 弹出层
   const [isModalOpen, setIsModalOpen] = useState(false)
   const showModal = () => {
     setIsModalOpen(true)
   }
-
-  // 编辑
-  const onEditinfo = (data) => {
-    setIsRecord(data)
-    setIsModalOpen(true)
-  }
-
   const [recordobject, setIsRecord] = useState({})
   const [form] = Form.useForm()
-  // 提交表单
+  // 添加和修改
   const handleOk = async (values) => {
-    console.log(values)
     if (recordobject.id) {
       let res = await editlist({ ...values, id: recordobject.id })
       if (res.status === 1) {
         return message.error(`修改失败:${res.message}`)
       }
-      message.success('修改成功')
     } else {
       await register(values)
-      message.success('添加成功')
     }
+    message.success(`${recordobject.id?'编辑':'添加'}成功`)
     setIsModalOpen(false)
     setIsRecord(values)
-    // setList([...list, values])
+    pagesetobj({...pageobj})
   }
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
-  // const [obj, setobj] = useState({
-  //   pageSize: 2,
-  //   currentPage: 1,
-  //   total: 0,
-  // })
+  const [pageobj, pagesetobj] = useState({
+    pageSize: 7,
+    currentPage: 1,
+  })
   const [total, setTotal] = useState(0)
-  const [currentPage, setcurrentPage] = useState(1)
-  const [pageSize, setpageSize] = useState(5)
-
   const onPageChange = (page, pageSize) => {
-    console.log(page)
-    // setobj({
-    //   pageSize,
-    //   currentPage: page,
-    // })
-    setcurrentPage(page)
+    pagesetobj({
+      ...pageobj,
+      currentPage:page
+    })
   }
+  // 获取文章列表
+  const [list, setList] = useState([])
   const [search, setSearch] = useState(null)
-  useEffect(() => {
-    // 获取文章列表
-    async function getlistx() {
-      let res = await getlist({
-        message: search,
-        pageSize: pageSize,
-        currentPage: currentPage,
+  const getlistx =async()=> {
+    let res = await getlist({
+      message: search,
+      ...pageobj
+    })
+    res.data &&
+      res.data.forEach((item) => {
+        item.user_pic = item.user_pic || require('@/assets/def.jpg')
       })
-      res.data &&
-        res.data.forEach((item) => {
-          item.user_pic = item.user_pic || require('@/assets/def.jpg')
-        })
-      // setobj({
-      //   total: res.total,
-      // })
-      setTotal(res.total)
-      setList(res.data)
-    }
-    if (isModalOpen) {
-      form.setFieldsValue({ ...recordobject })
-    } else {
+    setTotal(res.total)
+    setList(res.data)
+  }
+  useEffect(() => {
       getlistx()
-    }
-  }, [recordobject, search, currentPage])
+  }, [search, pageobj])
   return (
     <>
       <div className="btnbox">
         <Button onClick={showModal} type="primary">
           添加
         </Button>
-        <Input onInput={(val) => setSearch(val.target.value)} value={search} />
+        <div className='btsright'>
+        <Input onInput={(val) => setSearch(val.target.value)}  value={search} />
+        <Button onClick={()=> setSearch('')} type="primary">
+          清除
+        </Button>
+        </div>
       </div>
       <Table
         rowKey="id"
@@ -189,7 +176,9 @@ const Article = () => {
         dataSource={list}
         pagination={{
           total: total,
-          pageSize: pageSize,
+          pageSize: pageobj.pageSize,
+          showTitle: true,
+          showTotal: (total) => `共${total}条`,
           onChange: onPageChange,
         }}
       />
