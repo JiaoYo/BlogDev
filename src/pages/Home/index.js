@@ -131,7 +131,7 @@ const Article = () => {
   const [pageobj, pagesetobj] = useState({
     pageSize: 7,
     currentPage: 1,
-    search: ''
+    message: ''
   })
   const [total, setTotal] = useState(0)
   const onPageChange = (page, pageSize) => {
@@ -162,7 +162,7 @@ const Article = () => {
         <Button onClick={showModal} type="primary">
           添加
         </Button>
-        <Input placeholder='搜索' allowClear onInput={(val) => pagesetobj({...pageobj,search:val.target.value})}  />
+        <Input placeholder='搜索' allowClear onChange={(val) => pagesetobj({...pageobj,message:val.target.value})}  />
       </div>
       <Table
         rowKey="id"
