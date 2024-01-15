@@ -110,7 +110,7 @@ const Share=()=> {
     message.success('删除成功')
     setPageObj({...pageObj})
   }
-  // 分页切换
+  // 分类筛选
   const onChange = (data) =>setPageObj({
     ...pageObj,
     pid:data,
@@ -181,17 +181,22 @@ const Share=()=> {
       </div>
       {/* 网站列表  */}
       <div className='right'>
-      <h2>网站全部列表</h2> <Button type="primary" onClick={()=>setIsModalOpen(true)}>添加</Button>
-      <Select
-          placeholder="选择分类"
-          optionFilterProp="children"
-          onChange={onChange}
-          allowClear={true}
-          fieldNames={
-            {label: 'shareCateName', value: 'id'}
-          }
-          options={ShareCateList}
-        />
+        <div className="header">
+          <h2>网站全部列表</h2> 
+          <div>
+          <Select
+              placeholder="选择分类"
+              optionFilterProp="children"
+              onChange={onChange}
+              allowClear={true}
+              fieldNames={
+                {label: 'shareCateName', value: 'id'}
+              }
+              options={ShareCateList}
+            />
+          <Button type="primary" onClick={()=>setIsModalOpen(true)}>添加</Button>
+          </div>
+        </div>
         <Table 
           dataSource={sharelist} 
           columns={columns} 
@@ -273,7 +278,7 @@ const Share=()=> {
           <Form.Item label="网站介绍" name="text" rules={[{ required: true ,  message: '请选择网站介绍'}]}>
             <TextArea rows={2} />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
             <Button type="primary" htmlType="submit">
               确定
             </Button>

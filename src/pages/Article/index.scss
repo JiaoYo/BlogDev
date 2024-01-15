@@ -1,23 +1,17 @@
-.content {
-  display: flex;
-}
+.active {
+  box-shadow: 1px 1px 5px 1px #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
 
-.box {
-  margin-right: 50px;
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 
-  h2 {
-    color: #000;
-
+    .ant-select {
+      width: 200px;
+      margin-left: 20px;
+    }
   }
-
-  img {
-    width: 100px;
-    height: 100px;
-  }
 }
-
-.list {
-  height: 800px;
-  overflow-y: scroll;
-}
-

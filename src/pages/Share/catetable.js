@@ -15,7 +15,6 @@ const Catetable=() =>{
       render: (data) => {
         return (
           <Space size="middle">
-           <div>
              <Button
               type="primary"
               shape="circle"
@@ -36,7 +35,6 @@ const Catetable=() =>{
                 icon={<DeleteOutlined />}
               />
             </Popconfirm> 
-            </div> 
           </Space>
         )
       },
@@ -79,8 +77,10 @@ const Catetable=() =>{
   return (
     <>
     <div>
+      <div className="header">
       <h2>网站列表分类</h2> 
         <Button type="primary" onClick={()=>setIsModalOpen(true)} >添加</Button>
+      </div>
       <Table  dataSource={ShareCateList} columns={columns} rowKey={record => record.id} />
     </div>
     <Modal title={`${editcatedata.id?'编辑':'添加'}`}  open={isModalOpen}   onOk={handleonOk} onCancel={cnacelopen}>

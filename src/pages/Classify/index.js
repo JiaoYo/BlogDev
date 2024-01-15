@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getlist, addlist, editlist, dellist } from '@/apis/article'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import './index.scss'
 import {
   Table,
   Input,
@@ -104,8 +105,8 @@ const Class = () => {
     }
   }, [articleList.length, recordobject])
   return (
-    <>
-      <div>
+    <div className='classify'>
+      <div className='header'>
         <Button onClick={showModal} type="primary">
           添加
         </Button>
@@ -181,17 +182,17 @@ const Class = () => {
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              offset: 8,
-              span: 16,
+              offset: 18,
+              span: 6,
             }}
           >
             <Button type="primary" htmlType="submit">
-              Submit
+              确定
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </div>
   )
 }
 export default Class

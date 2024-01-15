@@ -5,6 +5,7 @@ import { EditOutlined, DeleteOutlined,PlusOutlined,LoadingOutlined } from '@ant-
 import {getNowDate} from '@/utils/useTools'
 import useClass from '@/hooks/useClass'
 import Editor from '@/components/Editor';
+import './index.scss'
 import {
   Table,
   Input,
@@ -92,6 +93,10 @@ const Acticle = () => {
   const showModal = () => {
     setisdislog(true)
   }
+  // 切换分类
+  const onChange = (value) => {
+    setpagination({...pagination,classify:value})
+  };
   // 频道列表
   const {channelList} =useClass()
   const { Option } = Select
@@ -100,7 +105,7 @@ const Acticle = () => {
 
   // 提交表单
   const handleOk = async (values) => {
-    values.url=imageUrl
+    values.url=imageUrl || "http://101.201.58.143:3007/api/映日.jpeg"
     if (editObj.id) {
       let res = await editArtCate({ ...values, id: editObj.id })
       if (res.status === 1) {
@@ -133,8 +138,9 @@ const Acticle = () => {
 
   // 分页
   const [pagination,setpagination] = useState({
-    pageSize:10,
+    pageSize:8,
     currentPage:1,
+    classify:''
   })
   const onPageChange=(page)=>{
     setpagination({
@@ -179,11 +185,17 @@ const Acticle = () => {
     </div>
   );
   return (
-    <>
-      <div>
+    <div className='active'>
+      <div className='header'>
         <Button onClick={showModal} type="primary">
           添加
         </Button>
+        <Select  onChange={onChange} placeholder="选择分类" allowClear
+          fieldNames={
+            {label: 'name', value: 'id'}
+          }
+          options={channelList}>
+        </Select>
       </div>
       <div>
         <Table
@@ -290,8 +302,8 @@ const Acticle = () => {
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              offset: 20,
-              span: 16,
+              offset: 12,
+              span: 12,
             }}
           >
             <Button type="primary" htmlType="submit">
@@ -300,7 +312,7 @@ const Acticle = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </div>
   )
 }
 export default Acticle

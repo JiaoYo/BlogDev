@@ -1,18 +1,10 @@
-.content{
-  display: flex;
-}
-.box {
-  margin-right: 50px;
-  h2 {
-    color: #000;
-  
+.classify {
+  box-shadow: 1px 1px 5px 1px #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+
+  .header {
+    margin-bottom: 20px;
   }
-  img {
-    width: 100px;
-    height: 100px;
-  }
-}
-.list{
-  height: 800px;
-  overflow-y: scroll;
 }

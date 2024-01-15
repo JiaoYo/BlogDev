@@ -131,6 +131,7 @@ const Article = () => {
   const [pageobj, pagesetobj] = useState({
     pageSize: 7,
     currentPage: 1,
+    search: ''
   })
   const [total, setTotal] = useState(0)
   const onPageChange = (page, pageSize) => {
@@ -141,10 +142,8 @@ const Article = () => {
   }
   // 获取文章列表
   const [list, setList] = useState([])
-  const [search, setSearch] = useState(null)
   const getlistx =async()=> {
     let res = await getlist({
-      message: search,
       ...pageobj
     })
     res.data &&
@@ -156,19 +155,14 @@ const Article = () => {
   }
   useEffect(() => {
       getlistx()
-  }, [search, pageobj])
+  }, [ pageobj])
   return (
-    <>
-      <div className="btnbox">
+    <div className='home'>
+      <div className="header">
         <Button onClick={showModal} type="primary">
           添加
         </Button>
-        <div className='btsright'>
-        <Input onInput={(val) => setSearch(val.target.value)}  value={search} />
-        <Button onClick={()=> setSearch('')} type="primary">
-          清除
-        </Button>
-        </div>
+        <Input placeholder='搜索' allowClear onInput={(val) => pagesetobj({...pageobj,search:val.target.value})}  />
       </div>
       <Table
         rowKey="id"
@@ -293,7 +287,7 @@ const Article = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </div>
   )
 }
 
