@@ -10,7 +10,7 @@ const Home = lazy(() => import('@/pages/Home'))
 const Classify = lazy(() => import('@/pages/Classify'))
 const Article = lazy(() => import('@/pages/Article'))
 const Share = lazy(() => import('@/pages/Share'))
-
+const SomePhoto =lazy(()=> import('@/pages/SomePhoto'))
 // 配置路由实例
 
 const router = createBrowserRouter([
@@ -55,6 +55,15 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: 'somephoto',
+        element: (
+          <Suspense fallback={'加载中'}>
+            <SomePhoto />
+          </Suspense>
+        ),
+      },
+      
     ],
   },
   {

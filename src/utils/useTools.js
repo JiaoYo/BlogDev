@@ -7,6 +7,6 @@ const getNowDate = () => {
   let hours = ("0" + now.getHours()).slice(-2);
   let minutes = ("0" + now.getMinutes()).slice(-2);
   let seconds = ("0" + now.getSeconds()).slice(-2);
-  return year + month + date + hours + minutes + seconds
+  return year +'-'+ month +'-'+ date + ' '+ hours +':'+ minutes + ':'+seconds
 }
 export  {getNowDate};

@@ -15,6 +15,11 @@ const items = [
     icon: <HomeOutlined />,
   },
   {
+    label: '随拍列表',
+    key: '/somephoto',
+    icon: <ApiOutlined  />,
+  },
+  {
     label: '文章分类',
     key: '/Classify',
     icon: <ApartmentOutlined />,
@@ -34,7 +39,6 @@ const items = [
 const GeekLayout = () => {
   const navigate = useNavigate()
   const onMenuClick = (route) => {
-    // console.log('菜单被点击了', route)
     const path = route.key
     navigate(path)
   }

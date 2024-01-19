@@ -1,0 +1,20 @@
+.active {
+  box-shadow: 1px 1px 5px 1px #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .ant-select {
+      width: 200px;
+      margin-left: 20px;
+    }
+  }
+  .img {
+    width:60px;
+  }
+}
