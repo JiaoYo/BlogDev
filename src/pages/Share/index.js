@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react'
 import { upload } from '@/apis/user'
 import {getsharelist,addshare,editshare,delshare} from '@/apis/share'
-import {Button ,Table,Space,Popconfirm,Select,Modal,Form,Input,Upload,message} from 'antd'
+import {Button ,Table,Space,Popconfirm,Select,Modal,Form,Input,Upload,message ,Image} from 'antd'
 import { EditOutlined, DeleteOutlined,PlusOutlined  ,LoadingOutlined} from '@ant-design/icons'
 import useShareCate from '@/hooks/useShareCate'
 import './index.scss'
@@ -20,7 +20,7 @@ const Share=()=> {
       key: 'logo',
       render: (data) => {
         return (
-          <img  src={data.logo} alt="" />
+          <Image  src={data.logo} alt="" />
         )
       }
     },

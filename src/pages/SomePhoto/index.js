@@ -13,7 +13,8 @@ import {
   Form,
   Popconfirm,
   message,
-  Upload
+  Upload,
+  Image 
 } from 'antd'
 const { TextArea } = Input;
 const Acticle = () => {
@@ -27,7 +28,7 @@ const Acticle = () => {
       title: '图片',
       width: 160,
       render:(data)=>{
-       return <img className='img' src={data.url} alt="" />
+       return <Image className='img' src={data.url} alt="" />
       }
     },
     {
