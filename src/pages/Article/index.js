@@ -105,7 +105,7 @@ const Acticle = () => {
 
   // 提交表单
   const handleOk = async (values) => {
-    values.url=imageUrl || "http://101.201.58.143:3007/api/映日.jpeg"
+    values.url=imageUrl 
     if (editObj.id) {
       let res = await editArtCate({ ...values, id: editObj.id })
       if (res.status === 1) {
@@ -184,6 +184,19 @@ const Acticle = () => {
       </div>
     </div>
   );
+  // 自定义效验规则
+  const checkImg =()=>{
+    if (imageUrl) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('请上传图片或输入图片地址!'));
+  }
+  const checkContent =()=>{
+    if (content) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('请输入文章内容!'));
+  }
   return (
     <div className='active'>
       <div className='header'>
@@ -206,6 +219,8 @@ const Acticle = () => {
             total: total,
             pageSize: pagination.pageSize,
             onChange: onPageChange,
+            showTitle: true,
+            showTotal: (total) => `共 ${total} 条数据`,
           }}
         ></Table>
       </div>
@@ -230,6 +245,7 @@ const Acticle = () => {
           form={form}
           style={{
             maxWidth: 1000,
+            marginTop: 20,
           }}
           initialValues={{
             remember: true,
@@ -237,10 +253,12 @@ const Acticle = () => {
           onFinish={handleOk}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          scrollToFirstError
         >
           <Form.Item
             label="文章名称"
             name="name"
+            required={false}
             rules={[
               {
                 required: true,
@@ -253,6 +271,7 @@ const Acticle = () => {
           <Form.Item
             label="文章简介"
             name="synopsis"
+            required={false}
             rules={[
               {
                 required: true,
@@ -265,6 +284,7 @@ const Acticle = () => {
           <Form.Item
             label="文章分类"
             name="classify"
+            required={false}
             rules={[
               {
                 required: true,
@@ -274,15 +294,19 @@ const Acticle = () => {
           >
            <Select
               placeholder="请选择文章分类"
-              style={{ width: 120 }}
+              style={{ width: 180 }}
             >
               {channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Form.Item>
           <Form.Item
             label="文章封面"
-            name="url"
-            valuePropName=""
+            name="imageUrl"
+            rules={[
+              {
+                validator: checkImg,
+              },
+            ]}
           >
              <Upload
               name="avatar"
@@ -294,11 +318,15 @@ const Acticle = () => {
                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
             </Upload>
             <div style={{display:'flex',alignItems:"center",width:'50%'}}>
-            <Input value={imageUrl} placeholder='使用网络图片' allowClear onChange={(val)=>setImageUrl(val.target.value)}/>
-            <Button type="primary" size='small'  onClick={()=>setImageUrl('http://101.201.58.143:3007/api/映日.jpeg')}>使用默认</Button>
+            <Input value={imageUrl} placeholder='添加图片地址' allowClear onChange={(val)=>setImageUrl(val.target.value)}/>
+            <Button style={{marginLeft:'10px'}} type="primary"   onClick={()=>setImageUrl('http://101.201.58.143:3007/api/映日.jpeg')}>使用默认</Button>
            </div>
           </Form.Item>
-          <Form.Item  label="文章内容"  name="content">
+          <Form.Item  label="文章内容"  name="content"   rules={[
+              {
+                validator: checkContent,
+              },
+            ]}>
           <Editor
             setDetails={setDetails}
             value={content}
@@ -310,7 +338,7 @@ const Acticle = () => {
               span: 12,
             }}
           >
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" size='large'>
               提交
             </Button>
           </Form.Item>

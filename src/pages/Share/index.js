@@ -169,9 +169,15 @@ const Share=()=> {
     </button>
   );
   // 校验失败
-  const onFinishFailed = () => {
-    message.error('Submit failed!');
+  const onFinishFailed = (err) => {
   };
+  // 自定义校验
+  const checkImg =()=>{
+    if (imageUrl) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('请上传图片或输入图片地址!'));
+  }
   return (
     <>
     <div className='content'>
@@ -238,10 +244,15 @@ const Share=()=> {
           autoComplete="off"
           style={{ maxWidth: 600 }}
         >
-          <Form.Item label="名称" name="name" rules={[{ required: true,  message: '请输入名称', }]}>
+          <Form.Item label="名称" name="name" required={false} rules={[{ required: true,  message: '请输入名称', }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="网站logo"  valuePropName=""  >
+          <Form.Item  name="imageUrl" label="网站logo"  valuePropName=""  
+           rules={[
+            {
+              validator: checkImg,
+            },
+          ]}>
             <Upload  
             name="avatar"
             listType="picture-card"
@@ -265,17 +276,17 @@ const Share=()=> {
             <Button type="primary" size='small'  onClick={()=>setImageUrl('http://101.201.58.143:3007/api/logo.png')}>使用默认</Button>
            </div>
           </Form.Item>
-          <Form.Item label="网站地址" name="url" rules={[{ required: true,  message: '请输入网站地址' }]}>
+          <Form.Item label="网站地址" name="url"  required={false} rules={[{ required: true,  message: '请输入网站地址' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="所属分类" name="pid" rules={[{ required: true,  message: '请选择所属分类' }]}>
+          <Form.Item label="所属分类" name="pid"  required={false} rules={[{ required: true,  message: '请选择所属分类' }]}>
             <Select placeholder="选择分类"   allowClear={true}>
             {
               ShareCateList.map((item) => <Select.Option value={item.id} key={item.id}>{item.shareCateName}</Select.Option>)
             }
           </Select>
           </Form.Item>
-          <Form.Item label="网站介绍" name="text" rules={[{ required: true ,  message: '请选择网站介绍'}]}>
+          <Form.Item label="网站介绍" name="text"  required={false} rules={[{ required: true ,  message: '请输入网站介绍'}]}>
             <TextArea rows={2} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
