@@ -133,7 +133,10 @@ const Acticle = () => {
     form.resetFields()
   }
   // 通过组件传回来的值，设置组件的值
-  const setDetails = content => form.setFieldsValue({'content': content})
+  const setDetails = content =>{
+    setcontent(content)
+    form.setFieldsValue({'content': content})
+  } 
   const [content,setcontent] =useState(null) // 编辑器内容
 
   // 分页
@@ -192,7 +195,7 @@ const Acticle = () => {
     return Promise.reject(new Error('请上传图片或输入图片地址!'));
   }
   const checkContent =()=>{
-    if (content) {
+    if (content!=='<p><br></p>') {
       return Promise.resolve();
     }
     return Promise.reject(new Error('请输入文章内容!'));
