@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getlist, addlist, editlist, dellist } from '@/apis/somephoto'
-import { upload } from '@/apis/user'
-import { EditOutlined, DeleteOutlined,PlusOutlined,LoadingOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined,PlusOutlined } from '@ant-design/icons'
 import {getNowDate} from '@/utils/useTools'
 import './index.scss'
 import {
@@ -17,6 +16,13 @@ import {
   Image 
 } from 'antd'
 const { TextArea } = Input;
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 const Acticle = () => {
   const columns = [
     {
@@ -28,7 +34,14 @@ const Acticle = () => {
       title: '图片',
       width: 160,
       render:(data)=>{
-       return <Image className='img' src={data.url} alt="" />
+        return <Image.PreviewGroup
+          items={data.urls}
+        >
+          <Image
+            className='img'
+            src={data.url[0].url}
+          />
+        </Image.PreviewGroup>
       }
     },
     {
@@ -76,7 +89,7 @@ const Acticle = () => {
   const [form] = Form.useForm()
   const onEditinfo = (data) => {
     seteditObj(data)
-    setImageUrl(data.url)
+    setFileList(data.url)
     form.setFieldsValue({ ...data })
     setisdislog(true)
   }
@@ -103,7 +116,15 @@ const Acticle = () => {
    * 提交表单
    */
   const handleOk = async (values) => {
-    values.url=imageUrl 
+    let arr = []
+    fileList.forEach(item=>{
+      if (item.url) {
+        arr.push(item.url)
+      }else {
+        arr.push(item.response.url)
+      }
+    })
+    values.url= JSON.stringify(arr)
     if (editObj.id) {
       let res = await editlist({ ...values, id: editObj.id })
       if (res.status === 1) {
@@ -128,7 +149,7 @@ const Acticle = () => {
   const oncancel = () => {
     setisdislog(false)
     seteditObj({})
-    setImageUrl('')
+    setFileList([])
     form.resetFields()
   }
   // 分页
@@ -151,39 +172,59 @@ const Acticle = () => {
   useEffect(() => {
     async function getList() {
       const res = await getlist(pagination)
+      res.data.forEach(item=>{
+        item.url=JSON.parse(item.url)
+        item.urls=item.url
+        item.url=item.url.map(url=>{
+          return {url: url};
+        })
+      })
       setArticleList(res.data)
       settotal(res.total)
     }
     getList()
+    
   }, [pagination])
   // 图片上传
-  const customRequest= async(options)=>{
-    setLoading(true);
-    const { file } = options;
-    const formData = new FormData();
-    formData.append('file', file);
-    const {url}= await upload(formData)
-    setLoading(false);
-    setImageUrl(url)
-  }
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
-  // 图片上传加载动画
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+  const [fileList, setFileList] = useState([]);
+  const handleCancel = () => setPreviewOpen(false);
+  // 预览图片
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+  // 上传图片
+  const handleChange = ({ fileList: newFileList }) =>{
+    setFileList(newFileList)
+  };
   const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+      }}
+      type="button"
+    >
+      <PlusOutlined />
       <div
         style={{
           marginTop: 8,
         }}
       >
-        选择图片
+        Upload
       </div>
-    </div>
+    </button>
   );
   // 自定义效验规则
   const checkImg =()=>{
-    if (imageUrl) {
+    if (fileList.length > 0) {
       return Promise.resolve();
     }
     return Promise.reject(new Error('请上传图片或输入图片地址!'));
@@ -210,7 +251,7 @@ const Acticle = () => {
         ></Table>
       </div>
        <Modal
-        width={600}
+        width={900}
         title={editObj.id ? '编辑' : '添加'}
         okButtonProps={{
           style: {
@@ -264,28 +305,36 @@ const Acticle = () => {
               },
             ]}
           >
-            <TextArea rows={2} />
+            <TextArea rows={6} />
           </Form.Item>
           <Form.Item
             label="图片"
-            name="imageUrl"
+            valuePropName="fileList"
             rules={[
               {
                 validator: checkImg,
               },
             ]}
           >
-             <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              showUploadList={false}
-              customRequest={customRequest}
-               >
-                 {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-            </Upload>
+            <Upload
+                action="http://60.205.130.133:3007/api/upload"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+              <img
+                alt="example"
+                style={{
+                  width: '100%',
+                }}
+                src={previewImage}
+              />
+            </Modal>
             <div style={{display:'flex',alignItems:"center",width:'50%'}}>
-            <Input value={imageUrl} placeholder='添加图片地址' allowClear onChange={(val)=>setImageUrl(val.target.value)}/>
            </div>
           </Form.Item>
           <Form.Item
