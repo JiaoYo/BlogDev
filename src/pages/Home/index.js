@@ -71,8 +71,8 @@ const Article = () => {
               title="删除文章"
               description="确认要删除当前文章吗?"
               onConfirm={() => onConfirm(data)}
-              okText="Yes"
-              cancelText="No"
+              okText="是"
+              cancelText="否"
             >
               <Button
                 type="primary"
@@ -97,8 +97,8 @@ const Article = () => {
       ...pageobj
     })
   }
-   // 编辑
-   const onEditinfo = (data) => {
+  // 编辑
+  const onEditinfo = (data) => {
     setIsRecord(data)
     form.setFieldsValue({ ...data })
     setIsModalOpen(true)
@@ -120,10 +120,10 @@ const Article = () => {
     } else {
       await register(values)
     }
-    message.success(`${recordobject.id?'编辑':'添加'}成功`)
+    message.success(`${recordobject.id ? '编辑' : '添加'}成功`)
     setIsModalOpen(false)
     setIsRecord(values)
-    pagesetobj({...pageobj})
+    pagesetobj({ ...pageobj })
   }
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -137,12 +137,12 @@ const Article = () => {
   const onPageChange = (page, pageSize) => {
     pagesetobj({
       ...pageobj,
-      currentPage:page
+      currentPage: page
     })
   }
   // 获取文章列表
   const [list, setList] = useState([])
-  const getlistx =async()=> {
+  const getlistx = async () => {
     let res = await getlist({
       ...pageobj
     })
@@ -154,15 +154,15 @@ const Article = () => {
     setList(res.data)
   }
   useEffect(() => {
-      getlistx()
-  }, [ pageobj])
+    getlistx()
+  }, [pageobj])
   return (
     <div className='home'>
       <div className="header">
         <Button onClick={showModal} type="primary">
           添加
         </Button>
-        <Input placeholder='搜索' allowClear onChange={(val) => pagesetobj({...pageobj,message:val.target.value})}  />
+        <Input placeholder='搜索' allowClear onChange={(val) => pagesetobj({ ...pageobj, message: val.target.value })} />
       </div>
       <Table
         rowKey="id"
@@ -282,7 +282,7 @@ const Article = () => {
             }}
           >
             <Button type="primary" htmlType="submit">
-              Submit
+              提交
             </Button>
           </Form.Item>
         </Form>

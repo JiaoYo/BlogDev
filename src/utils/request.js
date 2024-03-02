@@ -8,8 +8,8 @@ import { message } from 'antd'
 // 3. 请求拦截器 / 响应拦截器
 
 const request = axios.create({
-  baseURL: 'http://60.205.130.133:3007',
-  // baseURL: 'http://127.0.0.1:3007',
+  // baseURL: 'http://60.205.130.133:3007',
+  baseURL: 'http://127.0.0.1:3007',
   timeout: 5000,
 })
 

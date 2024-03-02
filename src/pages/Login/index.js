@@ -8,8 +8,8 @@ const Login = () => {
   const navigate = useNavigate()
   const onFinish = async (values) => {
     // 触发异步action fetchLogin
-   let res = await dispatch(fetchLogin(values))
-   if(!res)return
+    let res = await dispatch(fetchLogin(values))
+    if (!res) return
     // 1. 跳转到首页
     navigate('/')
     // 2. 提示一下用户
@@ -18,7 +18,7 @@ const Login = () => {
   return (
     <div className="login">
       <Card className="login-container">
-          <h1>欢迎登陆</h1>
+        <h1>欢迎登陆</h1>
         {/* 登录表单 */}
         <Form onFinish={onFinish} validateTrigger="onBlur">
           <Form.Item
@@ -31,18 +31,18 @@ const Login = () => {
               },
             ]}
           >
-            <Input size="large" placeholder="请输入手机号" />
+            <Input size="large" placeholder="请输入账号" />
           </Form.Item>
           <Form.Item
             name="password"
             rules={[
               {
                 required: true,
-                message: '请输入验证码',
+                message: '请输入密码',
               },
             ]}
           >
-            <Input size="large" placeholder="请输入验证码" />
+            <Input.Password size="large" placeholder="请输入密码" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" size="large" block>
