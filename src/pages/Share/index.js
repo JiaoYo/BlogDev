@@ -273,7 +273,7 @@ const Share=()=> {
             </Upload>
            <div style={{display:'flex',alignItems:"center"}}>
            <Input value={imageUrl} placeholder='可输入图片地址' onChange={(val)=>setImageUrl(val.target.value)}/>
-            <Button type="primary" size='small'  onClick={()=>setImageUrl('http://101.201.58.143:3007/api/logo.png')}>使用默认</Button>
+            <Button type="primary" size='small'  onClick={()=>setImageUrl('http://60.205.130.133:3007/apiimg/logo.png')}>使用默认</Button>
            </div>
           </Form.Item>
           <Form.Item label="网站地址" name="url"  required={false} rules={[{ required: true,  message: '请输入网站地址' }]}>

@@ -322,7 +322,7 @@ const Acticle = () => {
             </Upload>
             <div style={{display:'flex',alignItems:"center",width:'50%'}}>
             <Input value={imageUrl} placeholder='添加图片地址' allowClear onChange={(val)=>setImageUrl(val.target.value)}/>
-            <Button style={{marginLeft:'10px'}} type="primary"   onClick={()=>setImageUrl('http://60.205.130.133:3007/api/映日.jpeg')}>使用默认</Button>
+            <Button style={{marginLeft:'10px'}} type="primary"   onClick={()=>setImageUrl('http://60.205.130.133:3007/apiimg/映日.jpeg')}>使用默认</Button>
            </div>
           </Form.Item>
           <Form.Item  label="文章内容"  name="content"   rules={[
