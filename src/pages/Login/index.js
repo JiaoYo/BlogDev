@@ -3,6 +3,7 @@ import { Card, Form, Input, Button, message } from 'antd'
 import { useDispatch } from 'react-redux'
 import { fetchLogin } from '@/store/modules/user'
 import { useNavigate } from 'react-router-dom'
+import {setToken} from '@/utils/token'
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -49,6 +50,7 @@ const Login = () => {
               登录
             </Button>
           </Form.Item>
+          <span style={{cursor:'pointer'}} onClick={() =>{ navigate('/');setToken('tourist')}}>游客模式</span>
         </Form>
       </Card>
     </div>

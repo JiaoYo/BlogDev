@@ -69,7 +69,7 @@ const Article = () => {
             />
             <Popconfirm
               title="删除文章"
-              description="确认要删除当前文章吗?"
+              description="确认要删除当前用户吗?"
               onConfirm={() => onConfirm(data)}
               okText="是"
               cancelText="否"

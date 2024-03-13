@@ -53,7 +53,7 @@ export function updateavatarAPI(data) {
 //获取全部用户信息
 export function getlist(data) {
   return request({
-    url: '/api/getlist',
+    url: '/api/nojwt/getlist',
     method: 'POST',
     data,
   })

@@ -37,22 +37,9 @@ request.interceptors.request.use(
 // 在响应返回到客户端之前 做拦截 重点处理返回的数据
 request.interceptors.response.use(
   (response) => {
-    // 2xx 范围内的状态码都会触发该函数。
-    // if (response.data.message==="身份认证失败！") {
-    //   removeToken()
-    //   router.navigate('/login')
-    //   return new Promise(() => {})
-    // }
-    // else if (
-    //   response.data.status === 1) {
-    //   message.error(response.data.message)
-    //   return new Promise(() => {})
-    // } {
-    //   return response.data
-    // }
-    if (response.data.message === "身份认证失败！") {
-      removeToken();
-      router.navigate('/login');
+    if (response.data.message === "无权限！") {
+      // removeToken();
+      // router.navigate('/login');
       return;
   } else if (response.data.status === 1) {
       message.error(response.data.message);
@@ -61,14 +48,10 @@ request.interceptors.response.use(
   return response.data;
   },
   (error) => {
-    // 超出 2xx 范围的状态码都会触发该函数。
-    console.log(error, 'error')
-    if (error.response.status === 1) {
-      removeToken()
-      router.navigate('/login')
-      window.location.reload()
-    }
-    return Promise.reject(error)
+    message.warning(error.response.data.message)
+    return Promise.reject().catch(e =>{
+      return new Promise(() => {})
+    })
   }
 )
 

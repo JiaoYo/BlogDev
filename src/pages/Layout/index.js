@@ -5,7 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserInfo, clearUserInfo } from '@/store/modules/user'
-
+import { getToken } from '@/utils/token'
 const { Header, Sider } = Layout
 
 const items = [
@@ -52,7 +52,9 @@ const GeekLayout = () => {
   // 触发个人用户信息action
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchUserInfo())
+    if (getToken()!=="tourist") {
+      dispatch(fetchUserInfo())
+    }
   }, [dispatch])
 
   // 退出登录确认回调
@@ -69,7 +71,7 @@ const GeekLayout = () => {
         <div className="logo" >后台管理 </div>
         <div className="user-info">
           <span className="user-name">{name}</span>
-          <span className="user-logout">
+          {name?<span className="user-logout">
             <Popconfirm
               title="是否确认退出？"
               okText="退出"
@@ -78,7 +80,9 @@ const GeekLayout = () => {
             >
               <LogoutOutlined /> 退出
             </Popconfirm>
-          </span>
+          </span>:<span style={{cursor:'pointer'}} onClick={()=>navigate('/login')}>
+              登录
+          </span>}
         </div>
       </Header>
       <Layout>

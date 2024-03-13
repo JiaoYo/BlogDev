@@ -3,7 +3,7 @@ import { request } from '@/utils'
 // 查询 随拍 列表---------------------------------------------------------
 export function getlist(data) {
   return request({
-    url: '/api/getsomePhtoto',
+    url: '/api/nojwt/getsomePhtoto',
     method: 'post',
     data
   })

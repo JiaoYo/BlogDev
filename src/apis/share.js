@@ -3,7 +3,7 @@ import { request } from '@/utils'
 // 查询网站 列表---------------------------------------------------------
 export function getsharelist(data) {
   return request({
-    url: '/api/getshare',
+    url: '/api/nojwt/getshare',
     method: 'post',
     data
   })
@@ -37,7 +37,7 @@ export function delshare(data) {
 // 获取网站分类
 export function getsharecatelist() {
   return request({
-    url: '/api/getsharecate',
+    url: '/api/nojwt/getsharecate',
     method: 'get',
   })
 }

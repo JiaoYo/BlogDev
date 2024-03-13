@@ -3,14 +3,14 @@ import { request } from '@/utils'
 // 查询 文章分类 列表---------------------------------------------------------
 export function getlist() {
   return request({
-    url: '/my/article/cates',
+    url: '/api/nojwt/cates',
     method: 'GET',
   })
 }
 // 添加
 export function addlist(data) {
   return request({
-    url: '/my/article/addcate',
+    url: '/api/addcate',
     method: 'post',
     data,
   })
@@ -18,7 +18,7 @@ export function addlist(data) {
 // 编辑
 export function editlist(data) {
   return request({
-    url: `/my/article/editcate`,
+    url: `/api/editcate`,
     method: 'post',
     data,
   })
@@ -26,7 +26,7 @@ export function editlist(data) {
 //删除
 export function dellist(data) {
   return request({
-    url: `/my/article/delcate/${data}`,
+    url: `/api/delcate/${data}`,
     method: 'get',
   })
 }
@@ -34,7 +34,7 @@ export function dellist(data) {
 // 查询文章列表 ---------------------------------------------------------
 export function getarticleList(data) {
   return request({
-    url: `/api/getArtCateList`,
+    url: `/api/nojwt/getArtCateList`,
     method: 'post',
     data
   })
