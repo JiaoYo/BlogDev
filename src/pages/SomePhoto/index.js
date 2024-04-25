@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getlist, addlist, editlist, dellist } from '@/apis/somephoto'
-import { EditOutlined, DeleteOutlined,PlusOutlined } from '@ant-design/icons'
-import {getNowDate} from '@/utils/useTools'
+import { getlist, addlist, editlist, dellist, checkoutType } from '@/apis/somephoto'
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { getNowDate } from '@/utils/useTools'
 import './index.scss'
 import {
   Table,
@@ -13,7 +13,8 @@ import {
   Popconfirm,
   message,
   Upload,
-  Image 
+  Image,
+  Switch
 } from 'antd'
 const { TextArea } = Input;
 const getBase64 = (file) =>
@@ -33,7 +34,7 @@ const Acticle = () => {
     {
       title: '图片',
       width: 160,
-      render:(data)=>{
+      render: (data) => {
         return <Image.PreviewGroup
           items={data.urls}
         >
@@ -52,6 +53,17 @@ const Acticle = () => {
       title: '创建时间',
       width: 160,
       dataIndex: 'time',
+    },
+    {
+      title: '是否显示',
+      width: 160,
+      render: (data) => {
+        return (
+          <Space size="middle">
+            <Switch checked={data.showtype} onChange={() => onChange(data)} />
+          </Space>
+        )
+      },
     },
     {
       title: '操作',
@@ -84,6 +96,15 @@ const Acticle = () => {
     },
   ]
   /**
+   * 
+   * 切换显示状态 
+   */
+  const onChange = async (data) => {
+    await checkoutType(data.id)
+    message.success('切换成功')
+    setpagination({ ...pagination }) //刷新数据
+  }
+  /**
    * 编辑
    */
   const [form] = Form.useForm()
@@ -99,7 +120,7 @@ const Acticle = () => {
   const onConfirm = async (data) => {
     await dellist(Number(data.id))
     message.success('删除成功')
-    setpagination({...pagination}) //刷新数据
+    setpagination({ ...pagination }) //刷新数据
   }
   /**
    * 弹框
@@ -117,14 +138,14 @@ const Acticle = () => {
    */
   const handleOk = async (values) => {
     let arr = []
-    fileList.forEach(item=>{
+    fileList.forEach(item => {
       if (item.url) {
         arr.push(item.url)
-      }else {
+      } else {
         arr.push(item.response.url)
       }
     })
-    values.url= JSON.stringify(arr)
+    values.url = JSON.stringify(arr)
     if (editObj.id) {
       let res = await editlist({ ...values, id: editObj.id })
       if (res.status === 1) {
@@ -132,16 +153,16 @@ const Acticle = () => {
       }
       message.success('修改成功')
     } else {
-      values.time=getNowDate()
+      values.time = getNowDate()
       await addlist(values)
       message.success('添加成功')
     }
     oncancel()
-    setpagination({...pagination}) //刷新数据
+    setpagination({ ...pagination }) //刷新数据
   }
   /**
    * 表单错误回调
-   *  */  
+   *  */
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
@@ -153,14 +174,15 @@ const Acticle = () => {
     form.resetFields()
   }
   // 分页
-  const [pagination,setpagination] = useState({
-    pageSize:8,
-    currentPage:1,
+  const [pagination, setpagination] = useState({
+    pageSize: 8,
+    currentPage: 1,
   })
-  const onPageChange=(page)=>{
+  const onPageChange = (page) => {
     setpagination({
       ...pagination,
-      currentPage:page
+      currentPage: page,
+      type: 1
     })
   }
   /**
@@ -168,22 +190,22 @@ const Acticle = () => {
    * 
    */
   const [articleList, setArticleList] = useState([])
-  const [total,settotal] = useState(0)
+  const [total, settotal] = useState(0)
   useEffect(() => {
-    async function getList() {
+    async function getList () {
       const res = await getlist(pagination)
-      res.data.forEach(item=>{
-        item.url=JSON.parse(item.url)
-        item.urls=item.url
-        item.url=item.url.map(url=>{
-          return {url: url};
+      res.data.forEach(item => {
+        item.url = JSON.parse(item.url)
+        item.urls = item.url
+        item.url = item.url.map(url => {
+          return { url: url };
         })
       })
       setArticleList(res.data)
       settotal(res.total)
     }
     getList()
-    
+
   }, [pagination])
   // 图片上传
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -201,7 +223,7 @@ const Acticle = () => {
     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
   };
   // 上传图片
-  const handleChange = ({ fileList: newFileList }) =>{
+  const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
   };
   const uploadButton = (
@@ -223,7 +245,7 @@ const Acticle = () => {
     </button>
   );
   // 自定义效验规则
-  const checkImg =()=>{
+  const checkImg = () => {
     if (fileList.length > 0) {
       return Promise.resolve();
     }
@@ -238,7 +260,7 @@ const Acticle = () => {
       </div>
       <div>
         <Table
-        rowKey={record => record.id}
+          rowKey={record => record.id}
           columns={columns}
           dataSource={articleList}
           pagination={{
@@ -250,7 +272,7 @@ const Acticle = () => {
           }}
         ></Table>
       </div>
-       <Modal
+      <Modal
         width={900}
         title={editObj.id ? '编辑' : '添加'}
         okButtonProps={{
@@ -317,15 +339,15 @@ const Acticle = () => {
             ]}
           >
             <Upload
-                action="http://60.205.130.133:3007/api/upload"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-              >
-                {fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-              <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+              action="http://60.205.130.133:3007/api/upload"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
               <img
                 alt="example"
                 style={{
@@ -334,8 +356,8 @@ const Acticle = () => {
                 src={previewImage}
               />
             </Modal>
-            <div style={{display:'flex',alignItems:"center",width:'50%'}}>
-           </div>
+            <div style={{ display: 'flex', alignItems: "center", width: '50%' }}>
+            </div>
           </Form.Item>
           <Form.Item
             wrapperCol={{

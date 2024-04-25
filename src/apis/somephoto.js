@@ -31,3 +31,10 @@ export function dellist(data) {
     method: 'post',
   })
 }
+//切换
+export function checkoutType (data) {
+  return request({
+    url: `/api/checkoutSomePhoto/${data}`,
+    method: 'post',
+  })
+}

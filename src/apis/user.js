@@ -1,7 +1,7 @@
 // 用户相关的所有请求
 import { request } from '@/utils'
 // 1. 登录
-export function login(data) {
+export function login (data) {
   return request({
     url: '/api/login',
     method: 'POST',
@@ -12,7 +12,7 @@ export function login(data) {
   })
 }
 // 注册账号
-export function register(data) {
+export function register (data) {
   return request({
     url: '/api/reguser',
     method: 'POST',
@@ -20,14 +20,14 @@ export function register(data) {
   })
 }
 // 2. 获取用户信息
-export function getProfileAPI() {
+export function getProfileAPI () {
   return request({
     url: '/my/userinfo',
     method: 'GET',
   })
 }
 // 更新用户信息
-export function editlist(data) {
+export function editlist (data) {
   return request({
     url: '/api/editlist',
     method: 'POST',
@@ -35,7 +35,7 @@ export function editlist(data) {
   })
 }
 // 重置密码
-export function updatepwdAPI(data) {
+export function updatepwdAPI (data) {
   return request({
     url: '/updatepwd',
     method: 'POST',
@@ -43,7 +43,7 @@ export function updatepwdAPI(data) {
   })
 }
 // 更改头像
-export function updateavatarAPI(data) {
+export function updateavatarAPI (data) {
   return request({
     url: '/update/avatar',
     method: 'POST',
@@ -51,15 +51,15 @@ export function updateavatarAPI(data) {
   })
 }
 //获取全部用户信息
-export function getlist(data) {
+export function getlist (data) {
   return request({
-    url: '/api/nojwt/getlist',
+    url: '/api/getlist',
     method: 'POST',
     data,
   })
 }
 // 删除用户
-export function dellist(data) {
+export function dellist (data) {
   return request({
     url: `/api/dellist`,
     method: 'post',
@@ -67,7 +67,7 @@ export function dellist(data) {
   })
 }
 
-export function upload(data) {
+export function upload (data) {
   return request({
     url: `/api/upload`,
     method: 'post',
